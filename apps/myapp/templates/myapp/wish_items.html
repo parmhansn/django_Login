@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        button{
+            vertical-align: bottom;
+        }
+    
+    
+    
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="/clear"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav> 
+
+    <h3>Welcome {{user.name}}!</h3>
+    <h1>Your Wish List:</h1>	
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Added By</th>
+                <th scope="col">Date Added</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        {% for wishlist in wishlists %}
+        <tr>
+            <td><a href="/item/{{wishlist.id}}">{{ wishlist.item }}</a></td>
+            <td>{{ wishlist.uploader.name }}</td>
+            <td>{{ wishlist.date_added }}</td> 
+            <td>
+            {% if wishlist.uploader.id == request.session.user_id %}
+                <a href="/delete/{{ wishlist.id  }}"><button class="btn btn-success">Delete</button></a>
+            {%else%}
+                <a href="/remove/{{ wishlist.id  }}"><button class="btn btn-success">Remove From my Wishlist</button></a>
+            {%endif%}
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+        <h1>Other User's Wish List</h1>
+        <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Added By</th>
+                <th scope="col">Date Added</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        {% for wishlist in other_wishlists %}
+        <tr>
+            <td><a href="/item/{{wishlist.id}}">{{ wishlist.item }}</a></td>
+            <td>{{ wishlist.uploader.name }}</td>
+            <td>{{ wishlist.date_added }}</td>
+            <td>
+            {% if wishlist.uploader.name != request.session.user_id %}
+                <a href="/add_wishlist/{{ wishlist.id }}"><button>Add to my Wishlist</button></a>
+            {%endif%}
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+
+        <a href="/wish_items/add"><button class="btn btn-success">Add Item</button></a>
+        
+</body>
+</html>
